@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.sql.Timestamp;
 
 public class ForceBruteCombinaison implements ForceBrute {
@@ -21,20 +22,26 @@ public class ForceBruteCombinaison implements ForceBrute {
                 for (int i = 0; i < ArrayCombinnaison.length; i++) {
                     password = password.concat(String.valueOf(combinnaison[ArrayCombinnaison[i]]));
                 }
-                if (u.login(password)) {
-                    long fin = System.currentTimeMillis();
-                    long diff = fin - debut;
-                    Timestamp temps = new Timestamp(diff);
-                    System.out.println("Votre mot de passe " + password + " a ete trouver en " + temps.getHours()
-                            + " h : " + temps.getMinutes() + " m : " + temps.getSeconds() + " sec");
-                    return;
+                u.setPassword(password);
+                try {
+                    if (u.login()) {
+                        long fin = System.currentTimeMillis();
+                        long diff = fin - debut;
+                        Timestamp temps = new Timestamp(diff);
+                        System.out.println("Votre mot de passe " + password + " a ete trouver en "
+                                + " h : " + temps.getMinutes() + " m : " + temps.getSeconds() + " sec");
+                        return;
+                    }
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                 }
                 for (int i = ArrayCombinnaison.length - 1; i >= 0; i--) {
                     if (ArrayCombinnaison[i] < (combinnaison.length - 1)) {
                         ArrayCombinnaison[i] = ArrayCombinnaison[i] + 1;
                         for (int j = i + 1; j < ArrayCombinnaison.length; j++) {
                             ArrayCombinnaison[j] = 0;
-                        }
+                        }// 2 9 27  2 10 0  B C A  
                         break;
                     }
                     if (i == 0) {

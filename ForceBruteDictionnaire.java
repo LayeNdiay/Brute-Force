@@ -11,12 +11,18 @@ public class ForceBruteDictionnaire implements ForceBrute {
             scan = new Scanner(new File("listCode.txt"));
             while (scan.hasNextLine()) {
                 String password = scan.nextLine();
-                if (u.login(password)) {
-                    long fin = System.currentTimeMillis();
-                    long diff = fin-debut;
-                    Timestamp temps = new Timestamp(diff);
-                    System.out.println("Votre mot de passe " + password + " a ete trouver en " + temps.getHours() + " h : " + temps.getMinutes()+" m : "+temps.getSeconds()+ " s");
-                    return;
+                u.setPassword(password);
+                try {
+                    if (u.login()) {
+                        long fin = System.currentTimeMillis();
+                        long diff = fin-debut;
+                        Timestamp temps = new Timestamp(diff);
+                        System.out.println("Votre mot de passe " + password + " a ete trouver en "  + temps.getMinutes()+" m : "+temps.getSeconds()+ " s");
+                        return;
+                    }
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                 }
             }
         } catch (FileNotFoundException e) {
